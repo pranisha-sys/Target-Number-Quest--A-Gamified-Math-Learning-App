@@ -222,48 +222,23 @@
 </head>
 <body>
     <div class="container">
-        <div class="logo">
-            <span class="logo-icon">✨</span>
-        </div>
-
-        <h1>Target Number Quest</h1>
-        <p class="subtitle">Let's learn and play!</p>
-
-        <form id="startForm" onsubmit="startGame(event)">
-            <div class="form-group">
-                <label>What's your name?</label>
-                <input 
-                    type="text" 
-                    id="playerName" 
-                    class="input-field" 
-                    placeholder="Enter your name"
-                    maxlength="20"
-                    required
-                >
-                <p class="error-message" id="nameError">Please enter your name</p>
-            </div>
-
-            <div class="toggle-section">
-                <div class="toggle-content">
-                    <h3>Parent Approval</h3>
-                    <p>Parent must approve this session</p>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="parentApproval">
-                    <span class="slider"></span>
-                </label>
-            </div>
-
-            <div class="info-box">
-                <span class="info-box-icon">⏱️</span>
-                <span class="info-box-text">Max 30 minutes per session</span>
-            </div>
-
-            <button type="submit" class="start-btn" id="startBtn">
-                Start Learning Adventure! 🚀
-            </button>
-        </form>
+    <div class="logo">
+        <span class="logo-icon">✨</span>
     </div>
+
+    <h1>Target Number Quest</h1>
+    <p class="subtitle">Welcome, {{ username }}! Let's learn and play!</p>
+
+    <!-- Add logout button -->
+    <div style="text-align: right; margin-bottom: 20px;">
+        <a href="{% url 'game:logout' %}" style="color: #764ba2; text-decoration: none; font-weight: 600;">Logout</a>
+    </div>
+
+    <form id="startForm" onsubmit="startGame(event)">
+        {% csrf_token %}
+        <!-- rest of your form -->
+    </form>
+</div>
 
     <script>
         function startGame(event) {
@@ -305,6 +280,10 @@
             } else {
                 startBtn.disabled = true;
             }
+            if (!hasError) {
+        // Redirect to game page with player name
+        window.location.href = `/game/game/?name=${encodeURIComponent(playerName)}`;
+    }
         }
 
         // Initialize button state
