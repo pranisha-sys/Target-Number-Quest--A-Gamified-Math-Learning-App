@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Target Number Quest - Home</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: linear-gradient(135deg, #f5f5ff 0%, #ffffff 100%);
+            border-radius: 30px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            max-width: 560px;
+            width: 100%;
+            border: 3px solid rgba(138, 43, 226, 0.1);
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(253, 203, 110, 0.4);
+        }
+
+        .logo-icon {
+            font-size: 60px;
+        }
+
+        h1 {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.2em;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 18px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            background: #f8f9ff;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .toggle-section {
+            background: #f0f0ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toggle-content h3 {
+            color: #333;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .toggle-content p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 34px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
+            border: 2px solid #ffd93d;
+            border-radius: 15px;
+            padding: 18px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .info-box-icon {
+            font-size: 24px;
+        }
+
+        .info-box-text {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .start-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.3);
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(245, 87, 108, 0.4);
+        }
+
+        .start-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .start-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .error-message {
+            color: #f5576c;
+            font-size: 0.9em;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <span class="logo-icon">✨</span>
+        </div>
+
+        <h1>Target Number Quest</h1>
+        <p class="subtitle">Let's learn and play!</p>
+
+        <form id="startForm" onsubmit="startGame(event)">
+            <div class="form-group">
+                <label>What's your name?</label>
+                <input 
+                    type="text" 
+                    id="playerName" 
+                    class="input-field" 
+                    placeholder="Enter your name"
+                    maxlength="20"
+                    required
+                >
+                <p class="error-message" id="nameError">Please enter your name</p>
+            </div>
+
+            <div class="toggle-section">
+                <div class="toggle-content">
+                    <h3>Parent Approval</h3>
+                    <p>Parent must approve this session</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="parentApproval">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="info-box">
+                <span class="info-box-icon">⏱️</span>
+                <span class="info-box-text">Max 30 minutes per session</span>
+            </div>
+
+            <button type="submit" class="start-btn" id="startBtn">
+                Start Learning Adventure! 🚀
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function startGame(event) {
+            event.preventDefault();
+            
+            const playerName = document.getElementById('playerName').value.trim();
+            const parentApproval = document.getElementById('parentApproval').checked;
+            const errorMessage = document.getElementById('nameError');
+            
+            errorMessage.classList.remove('show');
+            
+            if (!playerName) {
+                errorMessage.textContent = 'Please enter your name';
+                errorMessage.classList.add('show');
+                return;
+            }
+
+            if (!parentApproval) {
+                errorMessage.textContent = 'Parent approval is required';
+                errorMessage.classList.add('show');
+                return;
+            }
+
+            // Redirect to game page with player name
+            window.location.href = `/game/?name=${encodeURIComponent(playerName)}`;
+        }
+
+        // Enable/disable button based on inputs
+        document.getElementById('playerName').addEventListener('input', updateButton);
+        document.getElementById('parentApproval').addEventListener('change', updateButton);
+
+        function updateButton() {
+            const playerName = document.getElementById('playerName').value.trim();
+            const parentApproval = document.getElementById('parentApproval').checked;
+            const startBtn = document.getElementById('startBtn');
+            
+            if (playerName && parentApproval) {
+                startBtn.disabled = false;
+            } else {
+                startBtn.disabled = true;
+            }
+        }
+
+        // Initialize button state
+        updateButton();
+    </script>
+</body>
+</html>
