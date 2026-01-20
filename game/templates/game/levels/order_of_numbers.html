@@ -1,0 +1,534 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ level_name }} - Target Number Quest</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .level-header {
+            background: linear-gradient(135deg, #bfdbfe 0%, #ddd6fe 100%);
+            border: 3px solid #60a5fa;
+            border-radius: 25px;
+            padding: 25px 40px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(96, 165, 250, 0.2);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .level-icon {
+            font-size: 3.5em;
+        }
+
+        .level-title h1 {
+            color: #374151;
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .level-title p {
+            color: #6b7280;
+            font-size: 1.1em;
+        }
+
+        .points-badge {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 20px;
+            font-size: 1.2em;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .home-btn {
+            background: white;
+            border: 3px solid #60a5fa;
+            border-radius: 15px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .home-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(96, 165, 250, 0.4);
+        }
+
+        /* Order Type Section */
+        .order-section {
+            background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+            border: 3px solid #a78bfa;
+            border-radius: 25px;
+            padding: 25px 40px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(167, 139, 250, 0.2);
+        }
+
+        .order-info h3 {
+            color: #374151;
+            font-size: 1.3em;
+            margin-bottom: 5px;
+        }
+
+        .order-info p {
+            color: #6b7280;
+            font-size: 1.1em;
+        }
+
+        .toggle-btn {
+            background: linear-gradient(135deg, #c084fc 0%, #a855f7 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
+        }
+
+        /* Game Area */
+        .game-area {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 3px solid #10b981;
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 20px;
+            min-height: 400px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+        }
+
+        .numbers-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            min-height: 250px;
+        }
+
+        .number-box {
+            background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+            color: white;
+            width: 100px;
+            height: 100px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: 700;
+            cursor: grab;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+            user-select: none;
+        }
+
+        .number-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.5);
+        }
+
+        .number-box.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .check-btn, .new-btn {
+            flex: 1;
+            padding: 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .check-btn {
+            background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .check-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .new-btn {
+            background: white;
+            color: #6b7280;
+            border: 3px solid #e5e7eb;
+        }
+
+        .new-btn:hover {
+            border-color: #10b981;
+            color: #10b981;
+        }
+
+        /* Feedback */
+        .feedback {
+            display: none;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 3px solid #f59e0b;
+            border-radius: 25px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-color: #10b981;
+        }
+
+        .feedback.incorrect {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-color: #f59e0b;
+        }
+
+        .feedback h3 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .feedback p {
+            color: #374151;
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .level-header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .header-left {
+                flex-direction: column;
+            }
+
+            .number-box {
+                width: 80px;
+                height: 80px;
+                font-size: 1.5em;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="level-header">
+            <div class="header-left">
+                <div class="level-icon">⭐</div>
+                <div class="level-title">
+                    <h1>{{ level_name }}</h1>
+                    <p>Drag and arrange the numbers!</p>
+                </div>
+            </div>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <div class="points-badge">
+                    <span>🎯</span>
+                    <span>{{ level_points }} Points</span>
+                </div>
+                <a href="{% url 'game:dashboard' %}" class="home-btn">🏠</a>
+            </div>
+        </div>
+
+        <!-- Order Type -->
+        <div class="order-section">
+            <div class="order-info">
+                <h3>Order Type:</h3>
+                <p id="orderTypeText">Smallest to Largest</p>
+            </div>
+            <button class="toggle-btn" onclick="toggleOrderType()">
+                <span id="orderIcon">↑</span>
+                <span id="orderBtnText">Ascending ↑</span>
+            </button>
+        </div>
+
+        <!-- Game Area -->
+        <div class="game-area">
+            <div class="numbers-container" id="numbersContainer">
+                <!-- Numbers will be generated here -->
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="check-btn" onclick="checkAnswer()">
+                <span>Check My Answer</span>
+                <span>✓</span>
+            </button>
+            <button class="new-btn" onclick="generateNumbers()">
+                <span>New Numbers</span>
+                <span>🔄</span>
+            </button>
+        </div>
+
+        <!-- Feedback -->
+        <div class="feedback" id="feedback">
+            <h3 id="feedbackEmoji"></h3>
+            <h3 id="feedbackTitle"></h3>
+            <p id="feedbackMessage"></p>
+        </div>
+    </div>
+
+    <script>
+        let numbers = [];
+        let isAscending = true;
+        let draggedElement = null;
+
+        // Initialize
+        generateNumbers();
+
+        // Generate random numbers
+        function generateNumbers() {
+            numbers = [];
+            const count = 8;
+            const max = 50;
+
+            while (numbers.length < count) {
+                const num = Math.floor(Math.random() * max) + 1;
+                if (!numbers.includes(num)) {
+                    numbers.push(num);
+                }
+            }
+
+            renderNumbers();
+            hideFeedback();
+        }
+
+        // Render numbers
+        function renderNumbers() {
+            const container = document.getElementById('numbersContainer');
+            container.innerHTML = '';
+
+            numbers.forEach((num, index) => {
+                const box = document.createElement('div');
+                box.className = 'number-box';
+                box.textContent = num;
+                box.draggable = true;
+                box.dataset.index = index;
+
+                box.addEventListener('dragstart', handleDragStart);
+                box.addEventListener('dragover', handleDragOver);
+                box.addEventListener('drop', handleDrop);
+                box.addEventListener('dragend', handleDragEnd);
+
+                container.appendChild(box);
+            });
+        }
+
+        // Drag and drop handlers
+        function handleDragStart(e) {
+            draggedElement = this;
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleDragOver(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            e.dataTransfer.dropEffect = 'move';
+            return false;
+        }
+
+        function handleDrop(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+
+            if (draggedElement !== this) {
+                const draggedIndex = parseInt(draggedElement.dataset.index);
+                const targetIndex = parseInt(this.dataset.index);
+
+                // Swap numbers
+                [numbers[draggedIndex], numbers[targetIndex]] = 
+                [numbers[targetIndex], numbers[draggedIndex]];
+
+                renderNumbers();
+            }
+
+            return false;
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('dragging');
+        }
+
+        // Toggle order type
+        function toggleOrderType() {
+            isAscending = !isAscending;
+
+            if (isAscending) {
+                document.getElementById('orderTypeText').textContent = 'Smallest to Largest';
+                document.getElementById('orderBtnText').textContent = 'Ascending ↑';
+                document.getElementById('orderIcon').textContent = '↑';
+            } else {
+                document.getElementById('orderTypeText').textContent = 'Largest to Smallest';
+                document.getElementById('orderBtnText').textContent = 'Descending ↓';
+                document.getElementById('orderIcon').textContent = '↓';
+            }
+
+            hideFeedback();
+        }
+
+        // Helper function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Check answer
+        function checkAnswer() {
+            const sortedNumbers = [...numbers].sort((a, b) => 
+                isAscending ? a - b : b - a
+            );
+
+            const isCorrect = JSON.stringify(numbers) === JSON.stringify(sortedNumbers);
+
+            showFeedback(isCorrect);
+
+            if (isCorrect) {
+                // Award 25 points for completing this level
+                const levelData = {
+                    level_id: '{{ level_id }}',
+                    score: {{ level_points }}
+                };
+
+                // Send completion data to backend
+                fetch('{% url "game:complete_level" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify(levelData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        setTimeout(() => {
+                            alert(`🎉 Amazing! You earned {{ level_points }} points!\n\nTotal Points: ${data.points}/275\n\nKeep going! 🚀`);
+                            window.location.href = '{% url "game:dashboard" %}';
+                        }, 1500);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    setTimeout(() => {
+                        alert('Great job! Level completed! 🎉');
+                        window.location.href = '{% url "game:dashboard" %}';
+                    }, 1500);
+                });
+            }
+        }
+
+        // Show feedback
+        function showFeedback(isCorrect) {
+            const feedback = document.getElementById('feedback');
+            const emoji = document.getElementById('feedbackEmoji');
+            const title = document.getElementById('feedbackTitle');
+            const message = document.getElementById('feedbackMessage');
+
+            feedback.className = 'feedback show ' + (isCorrect ? 'correct' : 'incorrect');
+
+            if (isCorrect) {
+                emoji.textContent = '🎉';
+                title.textContent = 'Perfect! Well done!';
+                message.textContent = 'You arranged the numbers correctly! Earning {{ level_points }} points...';
+            } else {
+                emoji.textContent = '💪';
+                title.textContent = "Not quite! Let's try again!";
+                message.textContent = isAscending 
+                    ? 'Hint: Move the numbers to make them go from small to big' 
+                    : 'Hint: Move the numbers to make them go from big to small';
+            }
+        }
+
+        // Hide feedback
+        function hideFeedback() {
+            document.getElementById('feedback').classList.remove('show');
+        }
+    </script>
+</body>
+</html>

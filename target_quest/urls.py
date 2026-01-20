@@ -1,9 +1,13 @@
 from django.contrib import admin
 from django.urls import path, include
-from django.shortcuts import redirect
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', lambda request: redirect('game:login')),  # Redirect root to login
-    path('game/', include('game.urls')),
+    path('', include('game.urls')),
 ]
+
+# Only add static/media in DEBUG mode
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

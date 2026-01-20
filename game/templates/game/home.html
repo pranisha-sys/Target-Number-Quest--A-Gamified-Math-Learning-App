@@ -1,9 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Target Number Quest - Home</title>
+    <title>Target Number Quest - Let's Learn and Play!</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +14,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            background: linear-gradient(135deg, #f0e7ff 0%, #e8f4ff 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -22,106 +23,116 @@
         }
 
         .container {
-            background: linear-gradient(135deg, #f5f5ff 0%, #ffffff 100%);
+            background: white;
             border-radius: 30px;
             padding: 50px 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            max-width: 560px;
+            max-width: 540px;
             width: 100%;
-            border: 3px solid rgba(138, 43, 226, 0.1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
         }
 
         .logo {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
-            border-radius: 50%;
-            margin: 0 auto 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 10px 30px rgba(253, 203, 110, 0.4);
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
         }
 
-        .logo-icon {
-            font-size: 60px;
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         h1 {
+            color: #7c3aed;
             text-align: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 2.2em;
             margin-bottom: 10px;
-            font-size: 2.5em;
-            font-weight: 800;
+            font-weight: 700;
         }
 
         .subtitle {
             text-align: center;
-            color: #666;
+            color: #6b7280;
             margin-bottom: 40px;
-            font-size: 1.2em;
+            font-size: 1.15em;
         }
 
-        .form-group {
+        .form-section {
             margin-bottom: 30px;
         }
 
-        label {
+        .form-label {
             display: block;
-            color: #333;
-            font-size: 1.1em;
+            color: #374151;
             font-weight: 600;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
+            font-size: 1em;
         }
 
-        .input-field {
+        input[type="text"] {
             width: 100%;
-            padding: 18px 20px;
-            border: 2px solid #e0e0e0;
-            border-radius: 15px;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-            background: #f8f9ff;
+            padding: 18px 22px;
+            border: 2px solid #e5e7eb;
+            border-radius: 20px;
+            font-size: 1em;
+            transition: all 0.3s;
+            background: #f9fafb;
+            color: #374151;
         }
 
-        .input-field:focus {
+        input[type="text"]::placeholder {
+            color: #9ca3af;
+        }
+
+        input[type="text"]:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #c084fc;
             background: white;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.1);
         }
 
-        .toggle-section {
-            background: #f0f0ff;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 25px;
+        .approval-section {
+            background: #f3f0ff;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .approval-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .toggle-content h3 {
-            color: #333;
-            font-size: 1.1em;
-            margin-bottom: 5px;
+        .approval-text {
+            flex: 1;
         }
 
-        .toggle-content p {
-            color: #666;
+        .approval-title {
+            font-weight: 600;
+            color: #374151;
+            font-size: 1em;
+            margin-bottom: 4px;
+        }
+
+        .approval-subtitle {
+            color: #6b7280;
             font-size: 0.9em;
         }
 
-        .toggle-switch {
+        .toggle {
             position: relative;
-            width: 60px;
-            height: 34px;
+            width: 56px;
+            height: 32px;
         }
 
-        .toggle-switch input {
+        .toggle input {
             opacity: 0;
             width: 0;
             height: 0;
@@ -134,7 +145,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #ccc;
+            background-color: #d1d5db;
             transition: 0.4s;
             border-radius: 34px;
         }
@@ -142,8 +153,8 @@
         .slider:before {
             position: absolute;
             content: "";
-            height: 26px;
-            width: 26px;
+            height: 24px;
+            width: 24px;
             left: 4px;
             bottom: 4px;
             background-color: white;
@@ -152,142 +163,217 @@
         }
 
         input:checked + .slider {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #c084fc;
         }
 
         input:checked + .slider:before {
-            transform: translateX(26px);
+            transform: translateX(24px);
         }
 
         .info-box {
-            background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
-            border: 2px solid #ffd93d;
-            border-radius: 15px;
+            background: #fef9e7;
+            border: 2px solid #fde68a;
+            border-radius: 20px;
             padding: 18px;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            margin-bottom: 25px;
+            text-align: center;
+            color: #78350f;
+            font-weight: 500;
+            font-size: 1em;
         }
 
-        .info-box-icon {
-            font-size: 24px;
-        }
-
-        .info-box-text {
-            color: #666;
-            font-size: 0.95em;
+        .info-icon {
+            margin-right: 8px;
         }
 
         .start-btn {
             width: 100%;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 20px;
+            background: linear-gradient(135deg, #d8b4fe 0%, #c084fc 100%);
             color: white;
             border: none;
-            padding: 20px;
-            border-radius: 15px;
-            font-size: 1.3em;
-            font-weight: bold;
+            border-radius: 20px;
+            font-size: 1.2em;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.3);
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(192, 132, 252, 0.3);
         }
 
         .start-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(245, 87, 108, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(192, 132, 252, 0.4);
         }
 
         .start-btn:active {
-            transform: translateY(-1px);
+            transform: translateY(0);
         }
 
         .start-btn:disabled {
-            background: #ccc;
+            opacity: 0.6;
             cursor: not-allowed;
-            box-shadow: none;
+            transform: none;
+        }
+
+        .waiting-section {
+            display: none;
+            text-align: center;
+            margin-top: 40px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .emoji-container {
+            margin-bottom: 15px;
+        }
+
+        .emoji {
+            font-size: 5em;
+            display: inline-block;
+            animation: bounce 1.5s infinite;
+            filter: drop-shadow(0 10px 20px rgba(255, 193, 7, 0.3));
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .waiting-text {
+            color: #6b7280;
+            font-size: 1.1em;
+            font-weight: 500;
         }
 
         .error-message {
-            color: #f5576c;
-            font-size: 0.9em;
-            margin-top: 8px;
+            color: #dc2626;
+            background: #fee2e2;
+            padding: 12px 18px;
+            border-radius: 15px;
+            margin-bottom: 20px;
             display: none;
+            font-size: 0.95em;
+            border: 2px solid #fecaca;
         }
 
-        .error-message.show {
-            display: block;
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 25px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .logo {
+                width: 160px;
+                height: 160px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-    <div class="logo">
-        <span class="logo-icon">✨</span>
+   <div class="container">
+        <div class="logo-container">
+            <div class="logo">
+                <img src="{% static 'images/logo.jpeg' %}" alt="Target Number Quest Logo">
+            </div>
+        </div>
+        
+        <h1>Target Number Quest</h1>
+        <p class="subtitle">Let's learn and play!</p>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <div class="form-section">
+            <label class="form-label" for="playerName">What's your name?</label>
+            <input type="text" id="playerName" placeholder="Enter your name" maxlength="50">
+        </div>
+
+        <div class="approval-section">
+            <div class="approval-header">
+                <div class="approval-text">
+                    <div class="approval-title">Parent Approval</div>
+                    <div class="approval-subtitle">Parent must approve this session</div>
+                </div>
+                <label class="toggle">
+                    <input type="checkbox" id="parentApproval">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <span class="info-icon">⏱️</span> Max 30 minutes per session
+        </div>
+
+        <button class="start-btn" id="startBtn" onclick="startAdventure()">
+            Start Learning Adventure! 🚀
+        </button>
+
+        <div class="waiting-section" id="waitingSection">
+            <div class="emoji-container">
+                <div class="emoji">😊</div>
+            </div>
+            <div class="waiting-text">Your learning friend is waiting!</div>
+        </div>
     </div>
-
-    <h1>Target Number Quest</h1>
-    <p class="subtitle">Welcome, {{ username }}! Let's learn and play!</p>
-
-    <!-- Add logout button -->
-    <div style="text-align: right; margin-bottom: 20px;">
-        <a href="{% url 'game:logout' %}" style="color: #764ba2; text-decoration: none; font-weight: 600;">Logout</a>
-    </div>
-
-    <form id="startForm" onsubmit="startGame(event)">
-        {% csrf_token %}
-        <!-- rest of your form -->
-    </form>
-</div>
 
     <script>
-        function startGame(event) {
-            event.preventDefault();
-            
-            const playerName = document.getElementById('playerName').value.trim();
-            const parentApproval = document.getElementById('parentApproval').checked;
-            const errorMessage = document.getElementById('nameError');
-            
-            errorMessage.classList.remove('show');
-            
-            if (!playerName) {
-                errorMessage.textContent = 'Please enter your name';
-                errorMessage.classList.add('show');
-                return;
-            }
-
-            if (!parentApproval) {
-                errorMessage.textContent = 'Parent approval is required';
-                errorMessage.classList.add('show');
-                return;
-            }
-
-            // Redirect to game page with player name
-            window.location.href = `/game/?name=${encodeURIComponent(playerName)}`;
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 3000);
         }
 
-        // Enable/disable button based on inputs
-        document.getElementById('playerName').addEventListener('input', updateButton);
-        document.getElementById('parentApproval').addEventListener('change', updateButton);
+        function startAdventure() {
+    const name = document.getElementById('playerName').value.trim();
+    const parentApproval = document.getElementById('parentApproval').checked;
+    const startBtn = document.getElementById('startBtn');
 
-        function updateButton() {
-            const playerName = document.getElementById('playerName').value.trim();
-            const parentApproval = document.getElementById('parentApproval').checked;
-            const startBtn = document.getElementById('startBtn');
-            
-            if (playerName && parentApproval) {
-                startBtn.disabled = false;
-            } else {
-                startBtn.disabled = true;
-            }
-            if (!hasError) {
-        // Redirect to game page with player name
-        window.location.href = `/game/game/?name=${encodeURIComponent(playerName)}`;
+    if (!name) {
+        showError('Please enter your name!');
+        document.getElementById('playerName').focus();
+        return;
     }
-        }
 
-        // Initialize button state
-        updateButton();
+    if (name.length < 2) {
+        showError('Name must be at least 2 characters long!');
+        return;
+    }
+
+    if (!parentApproval) {
+        showError('Please get parent approval before starting!');
+        return;
+    }
+
+    // Disable button and show waiting message
+    startBtn.disabled = true;
+    startBtn.textContent = 'Starting...';
+    document.getElementById('waitingSection').style.display = 'block';
+
+    // Redirect to avatar selection page
+    window.location.href = `/avatar/?name=${encodeURIComponent(name)}`;
+}
+
+        // Allow Enter key to submit
+        document.getElementById('playerName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                startAdventure();
+            }
+        });
+
+        // Input validation - only allow letters, spaces, hyphens, and apostrophes
+        document.getElementById('playerName').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^a-zA-Z\s'-]/g, '');
+        });
     </script>
 </body>
 </html>

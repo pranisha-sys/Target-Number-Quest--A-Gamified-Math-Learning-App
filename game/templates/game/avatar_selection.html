@@ -1,0 +1,417 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Your Learning Buddy - Target Number Quest</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0f7e9 0%, #e8f4ff 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 30px;
+            padding: 50px 40px;
+            max-width: 980px;
+            margin: 0 auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            color: #10b981;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 50px;
+            font-size: 1.2em;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            color: #374151;
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        /* Avatar Type Selection */
+        .avatar-types {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .avatar-type-card {
+            background: #f9fafb;
+            border: 3px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .avatar-type-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.15);
+        }
+
+        .avatar-type-card.selected {
+            background: #d1fae5;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+        }
+
+        .avatar-type-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+
+        .avatar-type-name {
+            color: #374151;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        /* Avatar Selection Grid */
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .avatar-option {
+            aspect-ratio: 1;
+            background: #f9fafb;
+            border: 3px solid #e5e7eb;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            padding: 15px;
+        }
+
+        .avatar-option:hover {
+            transform: scale(1.05);
+            border-color: #10b981;
+        }
+
+        .avatar-option.selected {
+            background: #d1fae5;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+        }
+
+        /* Preview Section */
+        .preview-container {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .preview-avatar {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 20px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8em;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Name Input */
+        .name-section {
+            margin-bottom: 30px;
+        }
+
+        .name-label {
+            display: block;
+            color: #374151;
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+
+        .name-input {
+            width: 100%;
+            padding: 18px 22px;
+            border: 3px solid #e5e7eb;
+            border-radius: 20px;
+            font-size: 1.1em;
+            transition: all 0.3s;
+            background: #f9fafb;
+            color: #374151;
+        }
+
+        .name-input:focus {
+            outline: none;
+            border-color: #10b981;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        /* Voice Preview Button */
+        .voice-btn {
+            width: 100%;
+            padding: 18px;
+            background: white;
+            color: #6b7280;
+            border: 3px solid #e5e7eb;
+            border-radius: 20px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .voice-btn:hover {
+            border-color: #10b981;
+            color: #10b981;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 22px;
+            background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.3em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Hidden elements */
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .avatar-types {
+                grid-template-columns: 1fr;
+            }
+
+            .avatar-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Create Your Learning Buddy!</h1>
+        <p class="subtitle">Choose an avatar to guide you through your adventure</p>
+
+        <form method="POST" id="avatarForm">
+            {% csrf_token %}
+            <input type="hidden" name="player_name" value="{{ player_name }}">
+            <input type="hidden" name="avatar_type" id="avatarTypeInput" value="animals">
+            <input type="hidden" name="avatar_choice" id="avatarChoiceInput" value="🐱">
+
+            <!-- Avatar Type Selection -->
+            <div class="section">
+                <h2 class="section-title">Choose Avatar Type</h2>
+                <div class="avatar-types">
+                    <div class="avatar-type-card selected" data-type="animals" onclick="selectAvatarType('animals')">
+                        <div class="avatar-type-icon">🐱</div>
+                        <div class="avatar-type-name">Animals</div>
+                    </div>
+                    <div class="avatar-type-card" data-type="numbers" onclick="selectAvatarType('numbers')">
+                        <div class="avatar-type-icon">#</div>
+                        <div class="avatar-type-name">Numbers</div>
+                    </div>
+                    <div class="avatar-type-card" data-type="shapes" onclick="selectAvatarType('shapes')">
+                        <div class="avatar-type-icon">○</div>
+                        <div class="avatar-type-name">Shapes</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Avatar Selection Grid -->
+            <div class="section">
+                <h2 class="section-title">Pick Your Favorite</h2>
+                <div class="avatar-grid" id="animalsGrid">
+                    <div class="avatar-option selected" data-avatar="🐱" onclick="selectAvatar('🐱')">🐱</div>
+                    <div class="avatar-option" data-avatar="🐶" onclick="selectAvatar('🐶')">🐶</div>
+                    <div class="avatar-option" data-avatar="🐻" onclick="selectAvatar('🐻')">🐻</div>
+                    <div class="avatar-option" data-avatar="🦊" onclick="selectAvatar('🦊')">🦊</div>
+                    <div class="avatar-option" data-avatar="🐰" onclick="selectAvatar('🐰')">🐰</div>
+                    <div class="avatar-option" data-avatar="🐼" onclick="selectAvatar('🐼')">🐼</div>
+                </div>
+
+                <div class="avatar-grid hidden" id="numbersGrid">
+                    <div class="avatar-option" data-avatar="1️⃣" onclick="selectAvatar('1️⃣')">1️⃣</div>
+                    <div class="avatar-option" data-avatar="2️⃣" onclick="selectAvatar('2️⃣')">2️⃣</div>
+                    <div class="avatar-option" data-avatar="3️⃣" onclick="selectAvatar('3️⃣')">3️⃣</div>
+                    <div class="avatar-option" data-avatar="4️⃣" onclick="selectAvatar('4️⃣')">4️⃣</div>
+                    <div class="avatar-option" data-avatar="5️⃣" onclick="selectAvatar('5️⃣')">5️⃣</div>
+                    <div class="avatar-option" data-avatar="6️⃣" onclick="selectAvatar('6️⃣')">6️⃣</div>
+                </div>
+
+                <div class="avatar-grid hidden" id="shapesGrid">
+                    <div class="avatar-option" data-avatar="🔴" onclick="selectAvatar('🔴')">🔴</div>
+                    <div class="avatar-option" data-avatar="🔵" onclick="selectAvatar('🔵')">🔵</div>
+                    <div class="avatar-option" data-avatar="🟢" onclick="selectAvatar('🟢')">🟢</div>
+                    <div class="avatar-option" data-avatar="🟡" onclick="selectAvatar('🟡')">🟡</div>
+                    <div class="avatar-option" data-avatar="⭐" onclick="selectAvatar('⭐')">⭐</div>
+                    <div class="avatar-option" data-avatar="💎" onclick="selectAvatar('💎')">💎</div>
+                </div>
+            </div>
+
+            <!-- Preview Section -->
+            <div class="preview-container">
+                <div class="preview-avatar" id="previewAvatar">🐱</div>
+                
+                <div class="name-section">
+                    <label class="name-label" for="buddyName">Name Your Buddy</label>
+                    <input type="text" 
+                           class="name-input" 
+                           id="buddyName" 
+                           name="buddy_name"
+                           placeholder="e.g., Buddy, Helper, Friend"
+                           maxlength="20"
+                           required>
+                </div>
+
+                <button type="button" class="voice-btn" onclick="speakBuddyName()">
+                    <span>🔊</span>
+                    <span>Hear Your Buddy Speak</span>
+                </button>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                Save & Start Learning! ✨
+            </button>
+        </form>
+    </div>
+
+    <script>
+        let currentType = 'animals';
+        let currentAvatar = '🐱';
+
+        function selectAvatarType(type) {
+            currentType = type;
+            
+            // Update type cards
+            document.querySelectorAll('.avatar-type-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelector(`[data-type="${type}"]`).classList.add('selected');
+
+            // Update grids
+            document.getElementById('animalsGrid').classList.add('hidden');
+            document.getElementById('numbersGrid').classList.add('hidden');
+            document.getElementById('shapesGrid').classList.add('hidden');
+            document.getElementById(`${type}Grid`).classList.remove('hidden');
+
+            // Update hidden input
+            document.getElementById('avatarTypeInput').value = type;
+
+            // Select first avatar of new type
+            const firstAvatar = document.querySelector(`#${type}Grid .avatar-option`);
+            if (firstAvatar) {
+                selectAvatar(firstAvatar.dataset.avatar);
+            }
+        }
+
+        function selectAvatar(avatar) {
+            currentAvatar = avatar;
+
+            // Update all avatar options
+            document.querySelectorAll('.avatar-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelector(`[data-avatar="${avatar}"]`).classList.add('selected');
+
+            // Update preview
+            document.getElementById('previewAvatar').textContent = avatar;
+
+            // Update hidden input
+            document.getElementById('avatarChoiceInput').value = avatar;
+        }
+
+        function speakBuddyName() {
+            const buddyName = document.getElementById('buddyName').value.trim();
+            if (!buddyName) {
+                alert('Please enter a name for your buddy first!');
+                document.getElementById('buddyName').focus();
+                return;
+            }
+
+            // Use Web Speech API if available
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(
+                    `Hi! I'm ${buddyName}! Let's learn together!`
+                );
+                utterance.rate = 0.9;
+                utterance.pitch = 1.2;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert(`Hi! I'm ${buddyName}! Let's learn together!`);
+            }
+        }
+
+        // Input validation
+        document.getElementById('buddyName').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^a-zA-Z\s'-]/g, '');
+        });
+    </script>
+</body>
+</html>
