@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comparing Numbers - Target Number Quest</title>
+    <title>{{ level_name }} - Target Number Quest</title>
     <style>
         * {
             margin: 0;
@@ -14,80 +14,639 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fef3c7 100%);
+            background: linear-gradient(135deg, #fae8ff 0%, #e9d5ff 50%, #fae8ff 100%);
             min-height: 100vh;
             padding: 20px;
+        }
+
+        .game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .game-header {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 30px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar {
+            font-size: 3em;
+        }
+
+        .header-title h1 {
+            color: #374151;
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .header-title p {
+            color: #6b7280;
+            font-size: 1.1em;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, #fef08a 0%, #fde047 100%);
+            padding: 15px 30px;
+            border-radius: 15px;
+            text-align: center;
+            border: 3px solid #facc15;
+        }
+
+        .score-display .score-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #854d0e;
+        }
+
+        .score-display .score-label {
+            font-size: 0.9em;
+            color: #713f12;
+            margin-top: 5px;
+        }
+
+        .home-btn {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 12px 18px;
+            cursor: pointer;
+            font-size: 1.5em;
+            transition: all 0.3s;
+        }
+
+        .home-btn:hover {
+            background: #f3f4f6;
+            transform: scale(1.1);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: white;
+            border-radius: 20px;
+            padding: 25px 40px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .question-number {
+            font-size: 1.1em;
+            color: #374151;
+            font-weight: 600;
+        }
+
+        .progress-dots {
+            display: flex;
+            gap: 10px;
+        }
+
+        .progress-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            transition: all 0.3s;
+        }
+
+        .progress-dot.completed {
+            background: #a78bfa;
+        }
+
+        .progress-dot.current {
+            background: #8b5cf6;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+        }
+
+        /* Game Area */
+        .game-area {
+            background: white;
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            min-height: 500px;
+        }
+
+        .question-title {
+            text-align: center;
+            font-size: 1.8em;
+            color: #374151;
+            margin-bottom: 50px;
+        }
+
+        .comparison-container {
             display: flex;
             justify-content: center;
             align-items: center;
+            gap: 60px;
+            margin-bottom: 50px;
         }
 
-        .container {
-            max-width: 800px;
-            width: 100%;
-            background: white;
-            border-radius: 30px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            color: #7c3aed;
+        .number-box {
             text-align: center;
-            font-size: 2.5em;
+        }
+
+        .number-display {
+            width: 150px;
+            height: 150px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+            font-weight: bold;
+            color: white;
             margin-bottom: 20px;
         }
 
-        .subtitle {
-            text-align: center;
-            color: #6b7280;
-            margin-bottom: 40px;
-            font-size: 1.2em;
+        .number-display.blue {
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
         }
 
-        .back-btn {
-            display: inline-block;
-            padding: 15px 30px;
-            background: linear-gradient(135d, #818cf8 0%, #6366f1 100%);
+        .number-display.purple {
+            background: linear-gradient(135deg, #c084fc 0%, #a855f7 100%);
+        }
+
+        .dots-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 300px;
+        }
+
+        .dot {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #3b82f6;
+        }
+
+        .dot.purple {
+            background: #a855f7;
+        }
+
+        .extra-count {
+            font-size: 1.2em;
+            color: #6b7280;
+            margin-left: 10px;
+        }
+
+        .question-mark {
+            font-size: 6em;
+            color: #d1d5db;
+        }
+
+        /* Answer Buttons */
+        .answer-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .answer-btn {
+            background: linear-gradient(135deg, #fb7185 0%, #f43f5e 100%);
+            border: none;
+            border-radius: 20px;
+            padding: 20px 50px;
+            font-size: 3em;
             color: white;
-            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .answer-btn .icon {
+            font-size: 1.5em;
+        }
+
+        .answer-btn .symbol {
+            font-size: 1em;
+        }
+
+        .answer-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(244, 63, 94, 0.3);
+        }
+
+        .answer-btn.correct {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            animation: pulse 0.5s;
+        }
+
+        .answer-btn.incorrect {
+            background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+            animation: shake 0.5s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .hint {
+            text-align: center;
+            color: #6b7280;
+            font-size: 1.1em;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 30px;
+            padding: 50px;
+            text-align: center;
+            max-width: 500px;
+            animation: modalSlideIn 0.5s;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 2.5em;
+            color: #374151;
+            margin-bottom: 15px;
+        }
+
+        .modal-message {
+            font-size: 1.3em;
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+
+        .rewards {
+            background: linear-gradient(135deg, #fef08a 0%, #fde047 100%);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .rewards-title {
+            font-size: 1.2em;
+            color: #854d0e;
+            margin-bottom: 15px;
+        }
+
+        .points-earned {
+            font-size: 3em;
+            font-weight: bold;
+            color: #713f12;
+        }
+
+        .continue-btn {
+            background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+            border: none;
             border-radius: 15px;
+            padding: 18px 40px;
+            font-size: 1.3em;
+            color: white;
+            cursor: pointer;
             font-weight: 600;
             transition: all 0.3s;
         }
 
-        .back-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        .continue-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
         }
 
-        .game-area {
-            background: #f9fafb;
-            border-radius: 20px;
-            padding: 30px;
-            margin: 30px 0;
-            text-align: center;
+        .feedback {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4em;
+            z-index: 999;
+            display: none;
+            animation: feedbackPop 1s;
         }
 
-        .game-area p {
-            font-size: 1.1em;
-            color: #374151;
-            line-height: 1.6;
+        @keyframes feedbackPop {
+            0% { transform: translate(-50%, -50%) scale(0); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+            100% { transform: translate(-50%, -50%) scale(0); }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>⚖️ Comparing Numbers</h1>
-        <p class="subtitle">Learn to use greater than (&gt;) and less than (&lt;) symbols</p>
-
-        <div class="game-area">
-            <p>🚧 This level is under construction! 🚧</p>
-            <p style="margin-top: 20px;">We're building an exciting game to help you compare numbers.</p>
-            <p style="margin-top: 10px;">Check back soon!</p>
+    <div class="game-container">
+        <!-- Header -->
+        <div class="game-header">
+            <div class="header-left">
+                <div class="avatar">{{ avatar_choice }}</div>
+                <div class="header-title">
+                    <h1>Comparing Numbers</h1>
+                    <p>Which number is bigger?</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="score-display">
+                    <div class="score-value" id="score">0</div>
+                    <div class="score-label">Score</div>
+                </div>
+                <button class="home-btn" onclick="window.location.href='{% url 'game:dashboard' %}'">🏠</button>
+            </div>
         </div>
 
-        <a href="{% url 'game:home' %}" class="back-btn">← Back to Dashboard</a>
+        <!-- Progress -->
+        <div class="progress-container">
+            <div class="progress-info">
+                <div class="question-number">Question <span id="currentQuestion">1</span> of 10</div>
+                <div class="progress-dots" id="progressDots"></div>
+            </div>
+        </div>
+
+        <!-- Game Area -->
+        <div class="game-area">
+            <h2 class="question-title">Compare these numbers:</h2>
+            
+            <div class="comparison-container">
+                <!-- Left Number -->
+                <div class="number-box">
+                    <div class="number-display blue" id="leftNumber">14</div>
+                    <div class="dots-container" id="leftDots"></div>
+                </div>
+
+                <div class="question-mark">?</div>
+
+                <!-- Right Number -->
+                <div class="number-box">
+                    <div class="number-display purple" id="rightNumber">44</div>
+                    <div class="dots-container" id="rightDots"></div>
+                </div>
+            </div>
+
+            <!-- Answer Buttons -->
+            <div class="answer-buttons">
+                <button class="answer-btn less" onclick="checkAnswer('<')">
+                    <div class="icon">🐊</div>
+                    <div class="symbol">&lt;</div>
+                </button>
+                <button class="answer-btn equal" onclick="checkAnswer('=')">
+                    <div class="icon">⚖️</div>
+                    <div class="symbol">=</div>
+                </button>
+                <button class="answer-btn greater" onclick="checkAnswer('>')">
+                    <div class="icon">🐊</div>
+                    <div class="symbol">&gt;</div>
+                </button>
+            </div>
+
+            <p class="hint">Hint: The crocodile 🐊 always eats the bigger number!</p>
+        </div>
     </div>
+
+    <!-- Completion Modal -->
+    <div class="modal" id="completionModal">
+        <div class="modal-content">
+            <div class="modal-icon">🎉</div>
+            <h2 class="modal-title">Level Complete!</h2>
+            <p class="modal-message">Great job comparing numbers!</p>
+            
+            <div class="rewards">
+                <div class="rewards-title">You earned</div>
+                <div class="points-earned" id="finalPoints">0 Points</div>
+            </div>
+
+            <button class="continue-btn" onclick="continueToNextLevel()">Continue Learning</button>
+        </div>
+    </div>
+
+    <!-- Feedback Animation -->
+    <div class="feedback" id="feedback"></div>
+
+    <script>
+        const totalQuestions = 10;
+        let currentQuestion = 1;
+        let score = 0;
+        let leftNum = 0;
+        let rightNum = 0;
+        let correctAnswer = '';
+
+        // Initialize progress dots
+        function initProgressDots() {
+            const dotsContainer = document.getElementById('progressDots');
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < totalQuestions; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'progress-dot';
+                if (i === 0) dot.classList.add('current');
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        // Update progress dots
+        function updateProgressDots() {
+            const dots = document.querySelectorAll('.progress-dot');
+            dots.forEach((dot, index) => {
+                dot.classList.remove('current');
+                if (index < currentQuestion - 1) {
+                    dot.classList.add('completed');
+                } else if (index === currentQuestion - 1) {
+                    dot.classList.add('current');
+                }
+            });
+        }
+
+        // Generate dots visualization
+        function generateDots(num, isBlue) {
+            const container = isBlue ? document.getElementById('leftDots') : document.getElementById('rightDots');
+            container.innerHTML = '';
+            
+            const maxDots = 10;
+            const dotsToShow = Math.min(num, maxDots);
+            
+            for (let i = 0; i < dotsToShow; i++) {
+                const dot = document.createElement('div');
+                dot.className = isBlue ? 'dot' : 'dot purple';
+                container.appendChild(dot);
+            }
+            
+            if (num > maxDots) {
+                const extra = document.createElement('span');
+                extra.className = 'extra-count';
+                extra.textContent = `+${num - maxDots}`;
+                container.appendChild(extra);
+            }
+        }
+
+        // Generate new question
+        function generateQuestion() {
+            // Generate two random numbers between 1 and 100
+            leftNum = Math.floor(Math.random() * 99) + 1;
+            rightNum = Math.floor(Math.random() * 99) + 1;
+            
+            // Make sure they're not equal (for variety)
+            while (leftNum === rightNum) {
+                rightNum = Math.floor(Math.random() * 99) + 1;
+            }
+
+            // Update display
+            document.getElementById('leftNumber').textContent = leftNum;
+            document.getElementById('rightNumber').textContent = rightNum;
+            
+            // Generate dots
+            generateDots(leftNum, true);
+            generateDots(rightNum, false);
+
+            // Determine correct answer
+            if (leftNum < rightNum) {
+                correctAnswer = '<';
+            } else if (leftNum > rightNum) {
+                correctAnswer = '>';
+            } else {
+                correctAnswer = '=';
+            }
+
+            // Update question number
+            document.getElementById('currentQuestion').textContent = currentQuestion;
+        }
+
+        // Show feedback
+        function showFeedback(isCorrect) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = isCorrect ? '✓' : '✗';
+            feedback.style.color = isCorrect ? '#22c55e' : '#ef4444';
+            feedback.style.display = 'block';
+            
+            setTimeout(() => {
+                feedback.style.display = 'none';
+            }, 1000);
+        }
+
+        // Check answer
+        function checkAnswer(answer) {
+            const buttons = document.querySelectorAll('.answer-btn');
+            buttons.forEach(btn => btn.disabled = true);
+
+            const isCorrect = answer === correctAnswer;
+            
+            // Visual feedback
+            showFeedback(isCorrect);
+            
+            if (isCorrect) {
+                score += 5; // 5 points per correct answer (total 50 points possible)
+                document.getElementById('score').textContent = score;
+            }
+
+            // Wait before next question
+            setTimeout(() => {
+                buttons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.classList.remove('correct', 'incorrect');
+                });
+
+                if (currentQuestion < totalQuestions) {
+                    currentQuestion++;
+                    updateProgressDots();
+                    generateQuestion();
+                } else {
+                    completeLevel();
+                }
+            }, 1500);
+        }
+
+        // Complete level
+        async function completeLevel() {
+            document.getElementById('finalPoints').textContent = score + ' Points';
+            document.getElementById('completionModal').classList.add('show');
+
+            // Save progress to backend
+            try {
+                const response = await fetch('{% url "game:complete_level" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        level_id: '{{ level_id }}',
+                        score: score
+                    })
+                });
+                
+                const data = await response.json();
+                console.log('Level completion saved:', data);
+            } catch (error) {
+                console.error('Error saving progress:', error);
+            }
+        }
+
+        // Continue to next level
+        function continueToNextLevel() {
+            // Always go to dashboard to see updated progress
+            window.location.href = '{% url "game:dashboard" %}';
+        }
+
+        // Initialize game
+        initProgressDots();
+        generateQuestion();
+    </script>
 </body>
 </html>
