@@ -190,11 +190,15 @@ def addition_subtraction(request):
     return render(request, 'game/levels/addition_subtraction.html', context)
 
 def revision_challenge(request):
-    """Revision Challenge level - 100 points"""
+    """Revision Challenge level - 100 points
+    Final level that tests all concepts learned from previous levels
+    """
     if not check_session(request):
         return redirect('game:home')
     
     game_progress = request.session.get('game_progress', {})
+    
+    # Check if all previous levels are completed
     if 'addition_subtraction' not in game_progress.get('levels_completed', []):
         messages.error(request, 'Complete "Addition & Subtraction" first!')
         return redirect('game:dashboard')
@@ -202,7 +206,7 @@ def revision_challenge(request):
     context = get_player_context(request)
     context['level_name'] = 'Revision Challenge'
     context['level_id'] = 'revision_challenge'
-    context['next_level'] = None
+    context['next_level'] = None  # This is the final level
     context['level_points'] = 100
     
     return render(request, 'game/levels/revision_challenge.html', context)
